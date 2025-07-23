@@ -32,10 +32,13 @@
 <div v-if="remainingTodos > 0">
   {{ remainingTodos}} tâche{{ remainingTodos > 1 ? 's' : ''}} à réaliser
 </div>
+
+  <Checkbox label="bonjour"/>
 </template>
 
 <script setup>
 import {computed, ref} from 'vue';
+import Checkbox from "@/Checkbox.vue";
 
 const hideCompleted = ref(false)
 const todos = ref([{
