@@ -1,17 +1,29 @@
+<template>
+  <label>
+    <!-- <input type="checkbox" @change="onChange"> {{ label }} -->
+    <input type="checkbox" v-model="model"> {{ label }}
+  </label>
+</template>
+
 <script setup>
 const props = defineProps({
   label: String
 })
 
-console.log(props.label)
+const emit = defineEmits(['check', 'uncheck'])
+
+const onChange = (event) => {
+  if(event.currentTarget.checked){
+    emit('check', event.currentTarget)
+  } else {
+    emit('uncheck', event.currentTarget)
+  }
+}
+
+const model = defineModel()
 </script>
 
-<template>
-  <label>
-    <input type="text"> Lorem ipsum
-  </label>
-</template>
-
 <style scoped>
+
 
 </style>
