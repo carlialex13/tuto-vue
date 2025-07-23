@@ -16,7 +16,7 @@
   <ul>
     <li
       :key="todo.date"
-      v-for="todo in sortedTodo()"
+      v-for="todo in sortedTodo"
       :class="{completed: todo.completed}"
     >
       <label>
@@ -29,11 +29,13 @@
     <input type="checkbox" v-model="hideCompleted"> Masquer les taches terminées
   </label>
 </div>
-
+<div v-if="remainingTodos > 0">
+  {{ remainingTodos}} tâche{{ remainingTodos > 1 ? 's' : ''}} à réaliser
+</div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import {computed, ref} from 'vue';
 
 const hideCompleted = ref(false)
 const todos = ref([{
@@ -55,17 +57,31 @@ const addTodo = () => {
     completed: false,
     date: Date.now
   })
-  newTodo.value = ''
+  newTodo.value = '';
 }
 
-const sortedTodo = () => {
+const remainingTodos = computed(() => {
+  return todos.value.filter( t => t.completed === false).length
+})
+
+// Ne doit pas $etre utilise car call a chaque modification de la page, exemple, a chaque fois que l'user tape un caractere dans l'input, la fonction est call
+// const sortedTodo = () => {
+//   const sortedTodo = todos.value.toSorted( (a,b) => a.completed > b.completed ? 1 : -1 )
+//
+//   if(hideCompleted.value === true){
+//     return sortedTodo.filter(t => t.completed === false)
+//   }
+//   return sortedTodo
+// }
+
+const sortedTodo = computed( () => {
   const sortedTodo = todos.value.toSorted( (a,b) => a.completed > b.completed ? 1 : -1 )
 
   if(hideCompleted.value === true){
     return sortedTodo.filter(t => t.completed === false)
   }
   return sortedTodo
-}  
+})
 </script>
 
 
