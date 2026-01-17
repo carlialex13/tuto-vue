@@ -1,5 +1,24 @@
 <template>
 
+<Layout>
+  <template #header>
+    En tete
+  </template>
+  <template #aside>
+    Aside
+  </template>
+  <template v-slot:main>
+    Main
+  </template>
+  <template v-slot:footer>
+    Footer
+  </template>
+</Layout>
+
+<Button>
+  <strong>Demo</strong> de button
+</Button>
+
 <form action="" @submit.prevent="addTodo">
   <fieldset role="group">
     <input
@@ -10,6 +29,7 @@
     <button :disabled="newTodo.length === 0">Ajouter</button>
   </fieldset>
 </form>
+
 <div v-if="todos.length === 0">Vous n'avez pas de tache</div>
 
 <div v-else>
@@ -19,23 +39,37 @@
       v-for="todo in sortedTodo"
       :class="{completed: todo.completed}"
     >
-      <label>
-        <input type="checkbox" v-model="todo.completed">
-      </label>
-      {{ todo.title }}
+      <!-- <Checkbox 
+      :label="todo.title" 
+      @check="console.log('coche')" 
+      @uncheck="console.log('uncheck')"
+      /> -->
+      <Checkbox 
+      :label="todo.title" 
+      v-model="todo.completed"
+      />
     </li>
   </ul>
+
   <label>
     <input type="checkbox" v-model="hideCompleted"> Masquer les taches terminées
   </label>
+
+  <div v-if="remainingTodos > 0">
+    {{ remainingTodos}} tâche{{ remainingTodos > 1 ? 's' : ''}} à réaliser
+  </div>
+
 </div>
-<div v-if="remainingTodos > 0">
-  {{ remainingTodos}} tâche{{ remainingTodos > 1 ? 's' : ''}} à réaliser
-</div>
+
+
+
 </template>
 
 <script setup>
 import {computed, ref} from 'vue';
+import Checkbox from "./Checkbox.vue";
+import Button from './Button.vue';
+import Layout from './Layout.vue';
 
 const hideCompleted = ref(false)
 const todos = ref([{
